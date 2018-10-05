@@ -1,0 +1,19 @@
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+*.bak
+
+.DS_STORE
+.idea
+*.iml
+target
+bin
+# Timer reports
+prx_report_server*
+
+.project
+.settings
+.clover/
+.classpath
+.class
+
+
