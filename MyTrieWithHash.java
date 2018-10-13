@@ -80,16 +80,3 @@ public class MyTrieWithHash {
 		System.out.println(dictionary.search("rakesh"));
 	}
 }
-
-
-
-for(var i = 20 ; i <= 100 ; i+20){
-	rectangle.style.width = '${i}%';
-	sleep(1000);
-}
-
-// for(var i = 20 ; i <= 100 ; i+=20){
-// 	elem.style.width = '${i}%';
-//   elem.style.background = '#00FF00';
-// 	sleep(1000);
-// }

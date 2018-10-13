@@ -2,7 +2,7 @@ import java.util.Scanner;
     
 public class Rotate90{
 	
-	pubic static vois showArray(final int[][] originalArray) {
+	public static void showArray(final int[][] originalArray) {
 		for(int i = 0; i < 3; i++) {
 			for(int j = 0; j < 3; j++) {
 				System.out.print(originalArray[i][j] + " - ");
