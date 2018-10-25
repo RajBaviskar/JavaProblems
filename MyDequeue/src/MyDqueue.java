@@ -1,6 +1,7 @@
 class Node{
     public int val;
     Node next;
+    Node prev;
     Node(int val){
         this.val = val;
     }
@@ -22,11 +23,12 @@ public class MyDqueue {
         }
 
         Node newNode = new Node(val);
-        newNode.next = tail;
+        tail.next = newNode;
+        newNode.prev = tail;
         tail = newNode;
     }
 
-    // O(n)
+    // O(1)
     public int poll(){
         if(head == null || tail == null){
             System.out.println("Queue is empty");
@@ -34,7 +36,7 @@ public class MyDqueue {
         }
 
 
-        if(tail.next == null){
+        if(head.next == null){
             int value = head.val;
             head = null;
             tail = null;
@@ -42,18 +44,16 @@ public class MyDqueue {
         }
 
         int value = head.val;
-        Node cur = tail;
-        while(cur.next != null && cur.next.val != head.val){
-            cur = cur.next;
-        }
-        cur.next = null;
-        head = cur;
+        Node newHead = head.next;
+        head.next = null;
+        head = newHead;
+        head.prev = null;
         return value;
     }
 
 
     public void printQueue(){
-        Node cur = tail;
+        Node cur = head;
         while (cur != null){
             System.out.print(cur.val + " -> ");
             cur = cur.next;
@@ -72,31 +72,37 @@ public class MyDqueue {
         }
 
         int value = tail.val;
-        tail = tail.next;
+        Node temp = tail;
+        tail = tail.prev;
+        temp = null;
         return value;
     }
 
 
     public static void main(String[] args){
+        // Deque<Integer> q = new LinkedList<>();
         MyDqueue q = new MyDqueue();
-        q.add(1);
-        q.add(2);
-        q.add(3);
-        q.add(4);
+//        q.add(1);
+//        q.add(2);
+//        q.add(3);
+//        q.add(4);
+
+
+ //       q.printQueue();
+
+//        System.out.println("Polled = " + q.poll());
+//        System.out.println("Polled = " + q.poll());
+//        System.out.println("Polled = " + q.poll());
+//        System.out.println("Polled = " + q.poll());
+//        System.out.println("Polled = " + q.poll());
+
+            q.push(1);
+            q.push(2);
+            q.push(3);
+            q.push(4);
+
+
         q.printQueue();
-
-        System.out.println("poped = " + q.pop());
-        System.out.println("poped = " + q.pop());
-
-        System.out.println("Polled = " + q.poll());
-
-        System.out.println("poped = " + q.pop());
-        System.out.println("poped = " + q.pop());
-
-        System.out.println("Polled = " + q.poll());
-        System.out.println("Polled = " + q.poll());
-
-
 
 
         System.out.println("poped = " + q.pop());
