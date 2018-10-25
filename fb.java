@@ -31,34 +31,37 @@ public class fb {
 		// 	} 
 		// }
 
-		// for negative
+		// for negative // without hasmap following logic is not good for all test cases
 			
-			if(ipArray[i] == target){
-				return true;
-			}
+//			if(ipArray[i] == target){
+//				return true;
+//			}
+//
+//			if(sum == 0 && ipArray[i] < 0){
+//				i++;
+//				continue;
+//			}
+//
+//			while(sum < target && i < ipLength){
+//				sum+= ipArray[i];
+//				i++;
+//			}
+//
+//			if(sum == target){
+//				return true;
+//			}
+//
+//			while(sum>target && backptr <= i){
+//				sum -= ipArray[backptr];
+//				backptr++;
+//			}
+//
+//			if(sum == target){
+//				return true;
+//			}
 
-			if(sum == 0 && ipArray[i] < 0){
-				i++;
-				continue;
-			}
 
-			while(sum < target && i < ipLength){
-				sum+= ipArray[i];
-				i++;
-			}
-
-			if(sum == target){
-				return true;
-			}	
-
-			while(sum>target && backptr <= i){
-				sum -= ipArray[backptr];
-				backptr++;
-			}
-
-			if(sum == target){
-				return true;
-			}	
+			// using hashMap
 
 	}
 	return false;
@@ -66,7 +69,7 @@ public class fb {
 
 
 	public static void main(String[] args) {
-		int[] ipArray = {5,1,3,2,7,9,8};
+		//int[] ipArray = {5,1,3,2,7,9,8};
 
 		//int[] ipArray = {8};
 
@@ -78,8 +81,9 @@ public class fb {
 
 		//int[] ipArray = {5,1,3,21,-3,3,2,1,2};
 		//int[] ipArray = {5,-1,3,-1,-5};
+		int [] ipArray = {1,-1,5,-2};
 
-		System.out.println(isCheck(ipArray,8));
+		System.out.println(isCheck(ipArray,3));
 	}
 
 }

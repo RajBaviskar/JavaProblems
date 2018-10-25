@@ -1,124 +1,121 @@
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Stack;
+
 
 public class CreatingGraph {
     int totalNode;
-    LinkedList<Integer>[] adjList;
-
-    CreatingGraph(int totalNode){
+    ArrayList<Integer>[] adjList;
+    public CreatingGraph(int totalNode){
         this.totalNode = totalNode;
-        this.adjList = new LinkedList[totalNode];
+        adjList = new ArrayList[totalNode];
         for(int i = 0; i < totalNode; i++){
-            adjList[i] = new LinkedList<Integer>();
+            adjList[i] = new ArrayList<>();
         }
     }
 
-    public void addEdge(int from, int to){
-        adjList[from].add(to);
-        adjList[to].add(from); // comment this line when you want directed graph
+    public void addEdge(int a, int b){
+        adjList[a].add(b);
+        adjList[b].add(a);
     }
 
-    private void printGraph() {
+    public void printGraph(){
         for(int i = 0; i < totalNode; i++){
-            LinkedList<Integer> list = adjList[i];
             System.out.println();
-            System.out.print("Node = " + i + "  Connected Nodes are=");
-            for(Integer item: list){
-                System.out.print(item + ",");
+            ArrayList<Integer> list = adjList[i];
+            System.out.print("Node = " + i + " -> ");
+            for(Integer each: list){
+                System.out.print(each + ",");
             }
         }
         System.out.println();
     }
 
-    private void bfs(int number) {
-        Queue<Integer> q = new LinkedList<>();
+    public void dfs(int start){
         boolean[] visited = new boolean[totalNode];
-        visited[number] = true;
+        System.out.println("####### DFS #######");
+        dfsUtil(start,visited);
+    }
 
-        q.add(number);
-        System.out.println("############# BFS ########### ");
-        while(!q.isEmpty()){
-            int num  = q.poll();
-            System.out.println(num + ",  ");
-            LinkedList<Integer> list = adjList[num];
-
-            for(Integer eachItem: list) {
-                if(!visited[eachItem]){
-                    visited[eachItem] = true;
-                    q.add(eachItem);
-                }
+    public void dfsUtil(int start,boolean[] visited){
+        System.out.println(start);
+        visited[start] = true;
+        ArrayList<Integer> list = adjList[start];
+        for(Integer each: list){
+            if(!visited[each]) {
+                dfsUtil(each, visited);
             }
         }
     }
 
-    private void dfs(int number) {
-        Deque<Integer> st = new LinkedList<>();
-        boolean[] visited = new boolean[totalNode];
-        visited[number] = true;
+    public void bfs(int start){
+       boolean[] visited = new boolean[totalNode];
+       System.out.println("####### BFS #######");
+       Queue<Integer> q = new LinkedList<>();
+       q.add(start);
+       visited[start] = true;
+       while (!q.isEmpty()){
+           int index = q.poll();
+           System.out.println(index);
 
-        st.push(number);
-        System.out.println("############# DFS ########### ");
-        while (!st.isEmpty()) {
-            int num = st.pop();
-            System.out.println(num + ",  ");
-            LinkedList<Integer> list = adjList[num];
 
-            for (Integer eachItem : list) {
-                if (!visited[eachItem]) {
-                    visited[eachItem] = true;
-                    st.push(eachItem);
-                }
-            }
-        }
+           ArrayList<Integer> list = adjList[index];
+           for(Integer each: list){
+               if(!visited[each]){
+                   q.add(each);
+                   visited[each] = true;
+               }
+           }
+
+       }
     }
 
-    private boolean isCycleDirected(int number) {
-        boolean[] visited = new boolean[totalNode];
+    public boolean isCycleDirected() {
         boolean[] rec = new boolean[totalNode];
-
-        return isCycleUtilDirected(number, visited,rec);
+        boolean[] visited = new boolean[totalNode];
+        return isCycleDirectedUtil(0, rec, visited);
     }
 
-    private boolean isCycleUtilDirected(int number, boolean[] visited, boolean[] rec) {
-        if(rec[number]){
+    public boolean isCycleDirectedUtil(int index, boolean[] rec, boolean[] visited){
+        if(rec[index] == true){
             return true;
         }
 
-        if(visited[number]){
+        if(visited[index]){
             return false;
         }
 
-        LinkedList<Integer> list = adjList[number];
-        rec[number] = true;
-        visited[number] = true;
-        for (Integer eachItem : list) {
-            if(isCycleUtilDirected(eachItem, visited,rec)){
+        rec[index] = true;
+        visited[index] = true;
+
+        ArrayList<Integer> list = adjList[index];
+        for(Integer each:list){
+            if(isCycleDirectedUtil(each,rec,visited)){
                 return true;
             }
         }
-        rec[number] = false;
+
+        rec[index] = false;
 
         return false;
     }
 
-    private boolean isCycleUnDirected(int number) {
+    public boolean isCycleUnDirected() {
         boolean[] visited = new boolean[totalNode];
-        return isCycleUtilUnDirected(number, visited,-1);
+        return isCycleUnDirectedUtil(0, visited, -1);
     }
 
-    private boolean isCycleUtilUnDirected(int number, boolean[] visited, int parent) {
+    public boolean isCycleUnDirectedUtil(int index, boolean[] visited, int parent){
+        visited[index] = true;
 
-        visited[number] = true;
-        LinkedList<Integer> list = adjList[number];
-
-        for (Integer eachItem : list) {
-            if(!visited[eachItem]){
-                if(isCycleUtilUnDirected(eachItem, visited,number)){
+        ArrayList<Integer> list = adjList[index];
+        for(Integer each:list){
+            if(!visited[each]){
+                if(isCycleUnDirectedUtil(each,visited,index)){
                     return true;
                 }
-            }else if(eachItem != parent){
+            }else if(each != parent){
                 return true;
             }
 
@@ -128,40 +125,55 @@ public class CreatingGraph {
     }
 
     private void topologicalSort() {
+        System.out.println("########## Topological sort BFS ##########");
         boolean[] visited = new boolean[totalNode];
         Deque<Integer> q = new LinkedList<>();
-        topologicalSortUtil(0, visited, q);
-        System.out.println(" ####### Topology Sort #######");
+        q.add(0);
+        visited[0] = true;
+
+        while (!q.isEmpty()){
+            int item = q.poll();
+            System.out.println(item);
+
+            ArrayList<Integer> list = adjList[item];
+            for(Integer each:list){
+                if(!visited[each]){
+                    q.add(each);
+                    visited[each] = true;
+                }
+            }
+        }
+
+        System.out.println("########## Topological sort DFS ##########");
+        visited = new boolean[totalNode];
+        q.clear();
+        topologicalSortDFSUtil(0, visited,q);
         while(!q.isEmpty()){
             System.out.println(q.pop());
         }
+
     }
 
-    private void topologicalSortUtil(int number, boolean[] visited, Deque<Integer> q) {
-
-
-        visited[number] = true;
-        LinkedList<Integer> list = adjList[number];
-
-        for (Integer eachItem : list) {
-            if(!visited[eachItem]){
-                topologicalSortUtil(eachItem, visited,q);
+    private void topologicalSortDFSUtil(int item, boolean[] visited, Deque<Integer> q) {
+        visited[item] = true;
+        ArrayList<Integer> list = adjList[item];
+        for(Integer each:list){
+            if(!visited[each]){
+                topologicalSortDFSUtil(each,visited,q);
             }
         }
-        q.push(number);
+
+        q.push(item);
     }
 
     private boolean isTreeUndirected() {
-        // if cycle exists it nor tree
-        // if all nodes are not visited its not tree
         boolean[] visited = new boolean[totalNode];
-        if(isCycleUtilUnDirected(0,visited,-1)){
-            System.out.println("Since Cycle exists");
+        if(isCycleUnDirectedUtil(0, visited, -1)){
             return false;
         }
 
         for(int i = 0; i < totalNode; i++){
-            if(!visited[i]){
+            if(visited[i] != true){
                 return false;
             }
         }
@@ -170,29 +182,26 @@ public class CreatingGraph {
     }
 
     private int totalDisCon() {
+        int count=0;
         boolean[] visited = new boolean[totalNode];
-        int count = 0;
-        for(int i = 0 ; i < totalNode; i++){
-            if(!visited[i]){
+        for(int i = 0; i < totalNode; i++){
+            if(!visited[i] == true){
                 count++;
-                disConUtil(i,visited);
+                totalDisConUtil(i, visited);
             }
-
         }
-
         return count;
     }
 
-    private void disConUtil(int i, boolean[] visited) {
-        visited[i] = true;
-        LinkedList<Integer> list = adjList[i];
-        for(Integer eachItem: list){
-            if(!visited[eachItem]){
-                disConUtil(eachItem,visited);
+    private void totalDisConUtil(int item , boolean[] visited) {
+        visited[item] = true;
+        ArrayList<Integer> list = adjList[item];
+        for(Integer each:list){
+            if(!visited[each] == true){
+                totalDisConUtil(each, visited);
             }
         }
     }
-
 
     public static void main(String[] args) {
 
@@ -203,10 +212,10 @@ public class CreatingGraph {
         graph.addEdge(1,3);
         graph.addEdge(2,4);
         graph.addEdge(3,6);
-       // graph.addEdge(3,4);
+        graph.addEdge(3,4);
         graph.addEdge(4,5);
-//        graph.addEdge(4,3);
-//        graph.addEdge(5,4); // making it cycle
+        //graph.addEdge(4,3);
+        //graph.addEdge(5,4);
         //graph.addEdge(6,5);
         graph.addEdge(6,7);
 
@@ -219,16 +228,17 @@ public class CreatingGraph {
 //        graph.addEdge(1,4);
 
 
-        //graph.printGraph();
+        graph.printGraph();
 
-        //graph.bfs(0);
-        //graph.dfs(0);
-        //System.out.println(graph.isCycleDirected(0));
+        graph.bfs(0);
+        graph.dfs(0);
+        //System.out.println(graph.isCycleDirected());
+        System.out.println(graph.isCycleUnDirected());
 
 
-        //graph.topologicalSort();
+        graph.topologicalSort();
 
-        //System.out.println("This graph is tree = " + graph.isTreeUndirected());
+        System.out.println("This graph is tree = " + graph.isTreeUndirected());
 
 //        CreatingGraph g2 = new CreatingGraph(3);
 //        g2.addEdge(0, 1);
@@ -255,8 +265,4 @@ public class CreatingGraph {
 
 
     }
-
-
-
-
 }
