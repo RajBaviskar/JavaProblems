@@ -34,6 +34,10 @@ public class WD {
         // result into the movies arrayList
         List<String> movies = new ArrayList();
 
+        // I will do url verification
+        // I will use URI builder to build the url
+        //movies/search/?Title=spider&man
+
         try {
             // first response.
             String response = getResponseURL(url + substr);

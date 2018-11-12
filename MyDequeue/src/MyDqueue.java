@@ -1,3 +1,6 @@
+import java.util.Deque;
+import java.util.LinkedList;
+
 class Node{
     public int val;
     Node next;
@@ -80,7 +83,8 @@ public class MyDqueue {
 
 
     public static void main(String[] args){
-        // Deque<Integer> q = new LinkedList<>();
+        Deque<Integer> q = new LinkedList<>();
+        //LinkedHashMap<Integer,Integer> map = new LinkedHashMap<>();
         MyDqueue q = new MyDqueue();
 //        q.add(1);
 //        q.add(2);

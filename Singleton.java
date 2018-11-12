@@ -1,27 +1,34 @@
 public class Singleton {
-    private double pi;
-    private static Singleton Instance = new Singleton();
+    private static Singleton instance;
 
-    private Singleton(){
-        this.pi = 3.14;
+    private Singleton() {
+
     }
 
-    public static Singleton getInstance(){
-        if(Instance != null){
-            return Instance;
+    // lazy initialization // use when Singleton object is huge else opt for early initialization which is thread safe
+    // because instance gets created when class load(even before any one starts asking for instance.
+
+    public static Singleton getInstance() {
+        if (instance != null) {
+            return instance;
         }
-
-        return null;
+        // making thread safe costly operation
+        synchronized (Singleton.class) {
+            instance = new Singleton();
+        }
+        return instance;
     }
 
-    public void Display(){
-        System.out.println(pi);
+    public void display() {
+        System.out.println("In here in Singltons display");
     }
 }
 
 class Main {
     public static void main(String[] args) {
         Singleton one = Singleton.getInstance();
-        one.Display();
+        Singleton two = Singleton.getInstance();
+        one.display();
+        two.display();
     }
 }
